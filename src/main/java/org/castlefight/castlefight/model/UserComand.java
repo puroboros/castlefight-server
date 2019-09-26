@@ -1,16 +1,16 @@
 package org.castlefight.castlefight.model;
 
-public class UserResponse {
+public class UserComand {
     String content;
 
-    public UserResponse() {
+    public UserComand() {
     }
 
     public String getContent() {
         return content;
     }
 
-    public UserResponse(String content) {
+    public UserComand(String content) {
         this.content = content;
     }
 }

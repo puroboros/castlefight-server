@@ -1,7 +1,9 @@
 package org.castlefight.castlefight.config;
 
 
-import org.castlefight.castlefight.model.UserResponse;
+import java.util.Date;
+
+import org.castlefight.castlefight.model.UserComand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -15,9 +17,18 @@ public class SchedulerConfig {
     @Autowired
     SimpMessagingTemplate template;
 
+    
     @Scheduled(fixedDelay = 3000)
     public void sendAdhocMessages() {
-    	System.out.println("sendinf from scheduler");
-        template.convertAndSend("/menu/game-selection", new UserResponse("Fixed Delay Scheduler"));
+    	UserComand response = new UserComand("Fixed Delay Scheduler " + new Date().getTime());
+        template.convertAndSend("/menu/game-selection", response);
     }
+    
+    @Scheduled(fixedDelay = 3000)
+    public void sendAdhocMessagesToPikachu() {
+    	UserComand response = new UserComand("Fixed Delay Scheduler pikachu " + new Date().getTime());
+    	template.convertAndSendToUser("pikachu", "/menu/game-selection", response);
+    }
+    
+    
 }
