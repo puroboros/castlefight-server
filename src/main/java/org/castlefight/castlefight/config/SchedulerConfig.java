@@ -17,7 +17,7 @@ public class SchedulerConfig {
     @Autowired
     SimpMessagingTemplate template;
 
-    
+    /*
     @Scheduled(fixedDelay = 3000)
     public void sendAdhocMessages() {
     	UserComand response = new UserComand("Fixed Delay Scheduler " + new Date().getTime());
@@ -28,7 +28,7 @@ public class SchedulerConfig {
     public void sendAdhocMessagesToPikachu() {
     	UserComand response = new UserComand("Fixed Delay Scheduler pikachu " + new Date().getTime());
     	template.convertAndSendToUser("pikachu", "/menu/game-selection", response);
-    }
+    }*/
     
     
 }
