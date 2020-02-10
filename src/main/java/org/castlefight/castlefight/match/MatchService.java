@@ -17,6 +17,7 @@ public class MatchService {
         if(matches.stream().noneMatch(match -> match.getPlayer1().getId().equals(playerId) && match.getStatus().equals("open"))){
             Match match = new Match();
             match.setPlayer1(new PlayerPlaying());
+            match.getPlayer1().setStatus("waiting");
             match.getPlayer1().setId(playerId);
             match.setId(this.matches.size());
             match.setStatus("open");
