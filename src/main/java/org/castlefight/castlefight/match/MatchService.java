@@ -31,10 +31,21 @@ public class MatchService {
         }
     }
 
+    public void closeMatch(String ownerId, String callerId) throws GameException {
+        if (ownerId.equals(callerId)) {
+            Optional<Match> match = matches.stream().filter(iteratedMatch -> iteratedMatch.getPlayer1().getId().equals(ownerId)).findFirst();
+            if (match.isPresent()) {
+                matches.remove(match.get());
+            }
+        } else {
+            throw new GameException("You have no rights to do this");
+        }
+    }
+
     public Match joinMatch(String owner, String joiner) throws GameException {
-        Optional<Match> match = matches.stream().filter(iteratedMatch -> iteratedMatch.getPlayer1().getId().equals(owner) && iteratedMatch.getStatus().equals("open") ).findFirst();
+        Optional<Match> match = matches.stream().filter(iteratedMatch -> iteratedMatch.getPlayer1().getId().equals(owner) && iteratedMatch.getStatus().equals("open")).findFirst();
         if (match.isPresent()) {
-            if(owner.equals(joiner)){
+            if (owner.equals(joiner)) {
                 return match.get();
             }
             PlayerPlaying player2 = new PlayerPlaying();
