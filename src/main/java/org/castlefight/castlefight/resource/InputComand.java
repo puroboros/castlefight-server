@@ -27,29 +27,30 @@ public class InputComand {
     @MessageMapping("/game-selection")
     public UserComand getUser(Principal principal, @Payload UserSelection selection) {
         System.out.println("Principal: " + principal.getName() + "\n User: " + selection.toString());
-        switch (selection.getAction()) {
-            case "":
+        try {
+            switch (selection.getAction()) {
+                case "":
 
-                break;
-            case "mainMenu":
+                    break;
+                case "mainMenu":
 
-                break;
-            case "createMatch":
-                gameSelectionResponse(principal.getName(), "create", matchService.createMatch(principal.getName()));
+                    break;
+                case "createMatch":
+                    gameSelectionResponse(principal.getName(), "create", matchService.createMatch(principal.getName()));
 
-                break;
-            case "joinMatch":
-                try{
-                    Match match = matchService.joinMatch(selection.getDetails(), principal.getName());
-                    gameSelectionResponse(principal.getName(), "join", match);
-                    gameSelectionResponse(match.getPlayer1().getId(), "join", match);
-                } catch (Exception ex){
-                    gameSelectionResponse(principal.getName(), "join", "error");
-                }
-                break;
-            case "listMatches":
-                gameSelectionResponse(principal.getName(), "menu", matchService.getOpenMatches());
-                break;
+                    break;
+                case "joinMatch":
+                        Match match = matchService.joinMatch(selection.getDetails(), principal.getName());
+                        gameSelectionResponse(principal.getName(), "join", match);
+                        gameSelectionResponse(match.getPlayer1().getId(), "join", match);
+
+                    break;
+                case "listMatches":
+                    gameSelectionResponse(principal.getName(), "menu", matchService.getOpenMatches());
+                    break;
+            }
+        } catch (Exception ex){
+            gameSelectionResponse(principal.getName(), "error", ex.getMessage());
         }
         return null;
     }
