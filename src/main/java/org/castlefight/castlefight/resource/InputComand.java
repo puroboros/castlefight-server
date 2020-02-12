@@ -1,7 +1,9 @@
 package org.castlefight.castlefight.resource;
 
 import java.security.Principal;
+import java.util.List;
 
+import com.sun.deploy.util.ArrayUtil;
 import org.castlefight.castlefight.match.Match;
 import org.castlefight.castlefight.match.MatchService;
 import org.castlefight.castlefight.model.UserComand;
@@ -47,6 +49,11 @@ public class InputComand {
                     break;
                 case "listMatches":
                     gameSelectionResponse(principal.getName(), "menu", matchService.getOpenMatches());
+                    break;
+                case "playerReady":
+                    String[] detailsSplit = selection.getDetails().split("\n");
+                    matchService.setStatustoPlayer(detailsSplit[0],detailsSplit[1],detailsSplit[2]);
+                    matchService.broadcastMatchMessage(matchService.getMatchById(detailsSplit[0]),detailsSplit[0],"updateStatus");
                     break;
             }
         } catch (Exception ex){
