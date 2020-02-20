@@ -4,6 +4,7 @@ import org.castlefight.castlefight.model.GameException;
 import org.castlefight.castlefight.model.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -87,4 +88,14 @@ public class MatchService {
         }
     }
 
+    public Match moveUnit(Integer matchId, Integer troopId, Pair position) throws GameException {
+        Optional<Match> match = matches.stream().filter(iteratedMatch -> iteratedMatch.getId().equals(matchId)).findFirst();
+        if (match.isPresent()) {
+            Match existingMatch = match.get();
+            existingMatch.getTroop(troopId).setPosition(position);
+            return existingMatch;
+        } else {
+            throw new GameException("Game does not exists");
+        }
+    }
 }

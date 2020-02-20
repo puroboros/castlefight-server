@@ -1,9 +1,7 @@
 package org.castlefight.castlefight.resource;
 
 import java.security.Principal;
-import java.util.List;
 
-import com.sun.deploy.util.ArrayUtil;
 import org.castlefight.castlefight.match.Match;
 import org.castlefight.castlefight.match.MatchService;
 import org.castlefight.castlefight.model.UserComand;
@@ -64,6 +62,8 @@ public class InputComand {
         }
         return null;
     }
+
+
 
     private void gameSelectionResponse(String user, String method, Object payload){
         template.convertAndSendToUser(user, "/menu/game-selection", new UserResponse(method, payload));

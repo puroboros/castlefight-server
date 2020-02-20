@@ -5,6 +5,7 @@ import org.springframework.data.util.Pair;
 
 public abstract class ActiveUnit {
     private Pair<Integer, Integer> position;
+    private Integer id;
     private Float currentHp;
     private Float currentHpRegen;
     private Float currentMana;
@@ -12,6 +13,14 @@ public abstract class ActiveUnit {
 
     ActiveUnit(){
         this.position = Pair.of(0, 0);
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Pair<Integer, Integer> getPosition() {
