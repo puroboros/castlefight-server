@@ -45,7 +45,10 @@ public class InputComand {
                         Match match = matchService.joinMatch(selection.getDetails(), principal.getName());
                         gameSelectionResponse(principal.getName(), "join", match);
                         matchService.broadcastMatchMessage(match,match.getId(),"join");
-
+                        gameSelectionResponse(match.getOwner(), "join", match);
+                    break;
+                case "closeMatch":
+                    matchService.closeMatch(selection.getDetails(), principal.getName());
                     break;
                 case "listMatches":
                     gameSelectionResponse(principal.getName(), "menu", matchService.getOpenMatches());

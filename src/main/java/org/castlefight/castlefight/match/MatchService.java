@@ -38,6 +38,16 @@ public class MatchService {
             throw new GameException(playerId.concat(" already has an open game"));
         }
     }
+    public void closeMatch(String ownerId, String callerId) throws GameException {
+        if (ownerId.equals(callerId)) {
+            Optional<Match> match = matches.stream().filter(iteratedMatch -> iteratedMatch.getOwner().equals(ownerId)).findFirst();
+            if (match.isPresent()) {
+                matches.remove(match.get());
+            }
+        } else {
+            throw new GameException("You have no rights to do this");
+        }
+    }
 
     public Match joinMatch(String owner, String joiner) throws Exception{
         Optional<Match> match = matches.stream().filter(iteratedMatch -> iteratedMatch.getOwner().equals(owner) && iteratedMatch.getStatus().equals("open") ).findFirst();
@@ -45,10 +55,8 @@ public class MatchService {
             if(owner.equals(joiner)){
                 return match.get();
             }
-            //List<PlayerPlaying> player2 = new ArrayList<PlayerPlaying>();
             PlayerPlaying newPlayer = new PlayerPlaying();
             newPlayer.setId(joiner);
-            //match.get().setPlayer2(player2);
             match.get().getPlayers().add(newPlayer);
             match.get().setStatus("ready");
             return match.get();
