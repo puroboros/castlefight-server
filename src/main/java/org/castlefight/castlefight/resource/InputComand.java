@@ -44,7 +44,7 @@ public class InputComand {
                 case "joinMatch":
                         Match match = matchService.joinMatch(selection.getDetails(), principal.getName());
                         gameSelectionResponse(principal.getName(), "join", match);
-                        gameSelectionResponse(match.getPlayer1().getId(), "join", match);
+                        matchService.broadcastMatchMessage(match,match.getId(),"join");
 
                     break;
                 case "listMatches":
@@ -52,8 +52,8 @@ public class InputComand {
                     break;
                 case "playerReady":
                     String[] detailsSplit = selection.getDetails().split("\n");
-                    matchService.setStatustoPlayer(detailsSplit[0],detailsSplit[1],detailsSplit[2]);
-                    matchService.broadcastMatchMessage(matchService.getMatchById(detailsSplit[0]),detailsSplit[0],"updateStatus");
+                    matchService.setStatustoPlayer(Integer.parseInt(detailsSplit[0]),detailsSplit[1],detailsSplit[2]);
+                    matchService.broadcastMatchMessage(matchService.getMatchById(Integer.parseInt(detailsSplit[0])),Integer.parseInt(detailsSplit[0]),"updateStatus");
                     break;
             }
         } catch (Exception ex){

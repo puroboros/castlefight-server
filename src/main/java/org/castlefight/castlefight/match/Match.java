@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Match {
-    private PlayerPlaying player1;
+    private String owner;
     private List<PlayerPlaying> players;
     private String status;
     private Integer id;
@@ -23,12 +23,12 @@ public class Match {
         this.maxPlayers = maxPlayers;
     }
 
-    public PlayerPlaying getPlayer1() {
-        return player1;
+    public String getOwner() {
+        return owner;
     }
 
-    public void setPlayer1(PlayerPlaying player1) {
-        this.player1 = player1;
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public List<PlayerPlaying> getPlayers() {
