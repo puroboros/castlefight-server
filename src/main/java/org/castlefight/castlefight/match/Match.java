@@ -1,24 +1,42 @@
 package org.castlefight.castlefight.match;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Match {
-    private PlayerPlaying player1;
-    private PlayerPlaying player2;
+    private String owner;
+    private List<PlayerPlaying> players;
     private String status;
     private Integer id;
-    public PlayerPlaying getPlayer1() {
-        return player1;
+    private Integer maxPlayers;
+
+    public Match(){
+        maxPlayers= 10;
+        players = new ArrayList<PlayerPlaying>();
     }
 
-    public void setPlayer1(PlayerPlaying player1) {
-        this.player1 = player1;
+    public Integer getMaxPlayers() {
+        return maxPlayers;
     }
 
-    public PlayerPlaying getPlayer2() {
-        return player2;
+    public void setMaxPlayers(Integer maxPlayers) {
+        this.maxPlayers = maxPlayers;
     }
 
-    public void setPlayer2(PlayerPlaying player2) {
-        this.player2 = player2;
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public List<PlayerPlaying> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<PlayerPlaying> player2) {
+        this.players = player2;
     }
 
     public String getStatus() {
@@ -36,4 +54,5 @@ public class Match {
     public void setId(Integer id) {
         this.id = id;
     }
+
 }
