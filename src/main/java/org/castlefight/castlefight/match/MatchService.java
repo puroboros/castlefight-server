@@ -98,4 +98,19 @@ public class MatchService {
             throw new GameException("Game does not exists");
         }
     }
+
+    public Boolean checkMatch(Integer matchId) throws GameException{
+        boolean result = true;
+        Optional<Match> match = matches.stream().filter(iteratedMatch -> iteratedMatch.getId().equals(matchId)).findFirst();
+        if (match.isPresent()) {
+            for(PlayerPlaying player : match.get().getPlayers()){
+                if(!player.getStatus().equals("ready")){
+                    throw new GameException("Not all players are ready.");
+                }
+            }
+        } else {
+            throw new GameException("Match does not exist.");
+        }
+        return result;
+    }
 }
