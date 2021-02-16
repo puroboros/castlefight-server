@@ -56,6 +56,11 @@ public class InputComand {
                     matchService.setStatustoPlayer(Integer.parseInt(detailsSplit[0]),detailsSplit[1],detailsSplit[2]);
                     matchService.broadcastMatchMessage(matchService.getMatchById(Integer.parseInt(detailsSplit[0])),Integer.parseInt(detailsSplit[0]),"updateStatus");
                     break;
+                case "startGame":
+                    if(matchService.checkMatch(Integer.parseInt(selection.getDetails()))){
+                        matchService.getMatchById(Integer.parseInt(selection.getDetails())).setStatus("running");
+                    }
+                    break;
             }
         } catch (Exception ex){
             gameSelectionResponse(principal.getName(), "error", ex.getMessage());
