@@ -57,9 +57,8 @@ public class InputComand {
                     matchService.broadcastMatchMessage(matchService.getMatchById(Integer.parseInt(detailsSplit[0])),Integer.parseInt(detailsSplit[0]),BroadcastEvents.UPDATE_STATUS);
                     break;
                 case "startGame":
-                    if(matchService.checkMatch(Integer.parseInt(selection.getDetails()))){
-                        matchService.getMatchById(Integer.parseInt(selection.getDetails())).setStatus("running");
-                    }
+                    Match startedMatch = matchService.startGame(Integer.parseInt(selection.getDetails()), principal.getName());
+                    matchService.broadcastMatchMessage(startedMatch, startedMatch.getId(), BroadcastEvents.START);
                     break;
                 default:
                     System.out.println("Method not implemented: " + selection.getAction());

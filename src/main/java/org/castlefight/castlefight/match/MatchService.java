@@ -86,7 +86,7 @@ public class MatchService {
         System.out.println("broadcastMatchMessage");
         Match match = this.getMatchById(matchId);
         for (int i = 0; i < match.getPlayers().size(); i++) {
-            System.out.println("sending shit");
+            System.out.println("sending match " + message.toString() + " to: " + match.getPlayers().get(i).getId());
             template.convertAndSendToUser(match.getPlayers().get(i).getId(), "/menu/game-selection", new UserResponse(method, message));
         }
     }
@@ -95,7 +95,7 @@ public class MatchService {
         System.out.println("broadcastMatchMessage");
         Match match = this.getMatchById(matchId);
         for (int i = 0; i < match.getPlayers().size(); i++) {
-            System.out.println("sending shit");
+            System.out.println("sending game " + message.toString() +" to: " + match.getPlayers().get(i).getId());
             template.convertAndSendToUser(match.getPlayers().get(i).getId(), "/menu/game-command", new UserResponse(method, message));
         }
     }
@@ -126,5 +126,16 @@ public class MatchService {
             throw new GameException("Match does not exist.");
         }
         return result;
+    }
+
+    public Match startGame(Integer matchId, String requester) throws GameException {
+        System.out.println("Start Game: " + matchId + " requested by: " + requester + " on: " + matches.toString());
+        Optional<Match> match = matches.stream().filter(iteratedMatch -> iteratedMatch.getId().equals(matchId) && iteratedMatch.getOwner().equals(requester)).findFirst();
+        if (match.isPresent()) {
+            match.get().setStatus("running");
+            return match.get();
+        } else {
+            throw new GameException("Match not present or not the owner.");
+        }
     }
 }

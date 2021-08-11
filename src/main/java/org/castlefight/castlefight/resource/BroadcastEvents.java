@@ -5,4 +5,5 @@ public class BroadcastEvents {
     public static String MENU = "menu";
     public static String CREATE = "create";
     public static String UPDATE_STATUS = "updateStatus";
+    public static String START = "start";
 }
