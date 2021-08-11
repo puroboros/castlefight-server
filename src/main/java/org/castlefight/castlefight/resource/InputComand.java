@@ -26,7 +26,7 @@ public class InputComand {
 
     @MessageMapping("/game-selection")
     public UserComand getUser(Principal principal, @Payload UserSelection selection) {
-        System.out.println("Principal: " + principal.getName() + "\n User: " + selection.toString());
+        System.out.println("[InputComand] Principal: " + principal.getName() + "\n User: " + selection.toString());
         try {
             switch (selection.getAction()) {
                 case "":
@@ -36,30 +36,32 @@ public class InputComand {
 
                     break;
                 case "createMatch":
-                    gameSelectionResponse(principal.getName(), "create", matchService.createMatch(principal.getName()));
+                    gameSelectionResponse(principal.getName(), BroadcastEvents.CREATE, matchService.createMatch(principal.getName()));
 
                     break;
                 case "joinMatch":
                         Match match = matchService.joinMatch(selection.getDetails(), principal.getName());
-                        gameSelectionResponse(principal.getName(), "join", match);
-                        matchService.broadcastMatchMessage(match,match.getId(),"join");
-                        gameSelectionResponse(match.getOwner(), "join", match);
+                        gameSelectionResponse(principal.getName(), BroadcastEvents.JOIN, match);
+                        matchService.broadcastMatchMessage(match,match.getId(),BroadcastEvents.JOIN);
+                        gameSelectionResponse(match.getOwner(), BroadcastEvents.JOIN, match);
                     break;
                 case "closeMatch":
                     matchService.closeMatch(selection.getDetails(), principal.getName());
                     break;
                 case "listMatches":
-                    gameSelectionResponse(principal.getName(), "menu", matchService.getOpenMatches());
+                    gameSelectionResponse(principal.getName(), BroadcastEvents.MENU, matchService.getOpenMatches());
                     break;
                 case "playerReady":
                     String[] detailsSplit = selection.getDetails().split("\n");
                     matchService.setStatustoPlayer(Integer.parseInt(detailsSplit[0]),detailsSplit[1],detailsSplit[2]);
-                    matchService.broadcastMatchMessage(matchService.getMatchById(Integer.parseInt(detailsSplit[0])),Integer.parseInt(detailsSplit[0]),"updateStatus");
+                    matchService.broadcastMatchMessage(matchService.getMatchById(Integer.parseInt(detailsSplit[0])),Integer.parseInt(detailsSplit[0]),BroadcastEvents.UPDATE_STATUS);
                     break;
                 case "startGame":
-                    if(matchService.checkMatch(Integer.parseInt(selection.getDetails()))){
-                        matchService.getMatchById(Integer.parseInt(selection.getDetails())).setStatus("running");
-                    }
+                    Match startedMatch = matchService.startGame(Integer.parseInt(selection.getDetails()), principal.getName());
+                    matchService.broadcastMatchMessage(startedMatch, startedMatch.getId(), BroadcastEvents.START);
+                    break;
+                default:
+                    System.out.println("Method not implemented: " + selection.getAction());
                     break;
             }
         } catch (Exception ex){
