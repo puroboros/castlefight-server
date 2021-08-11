@@ -39,6 +39,7 @@ public class MatchService {
             throw new GameException(playerId.concat(" already has an open game"));
         }
     }
+
     public void closeMatch(String ownerId, String callerId) throws GameException {
         if (ownerId.equals(callerId)) {
             Optional<Match> match = matches.stream().filter(iteratedMatch -> iteratedMatch.getOwner().equals(ownerId)).findFirst();
@@ -50,10 +51,10 @@ public class MatchService {
         }
     }
 
-    public Match joinMatch(String owner, String joiner) throws Exception{
-        Optional<Match> match = matches.stream().filter(iteratedMatch -> iteratedMatch.getOwner().equals(owner) && iteratedMatch.getStatus().equals("open") ).findFirst();
-        if(match.isPresent()){
-            if(owner.equals(joiner)){
+    public Match joinMatch(String owner, String joiner) throws Exception {
+        Optional<Match> match = matches.stream().filter(iteratedMatch -> iteratedMatch.getOwner().equals(owner) && iteratedMatch.getStatus().equals("open")).findFirst();
+        if (match.isPresent()) {
+            if (owner.equals(joiner)) {
                 return match.get();
             }
             PlayerPlaying newPlayer = new PlayerPlaying();
@@ -70,28 +71,41 @@ public class MatchService {
         return matches.stream().filter(match -> match.getStatus().equals("open")).collect(Collectors.toList());
     }
 
-    public Match getMatchById(Integer id){
+    public Match getMatchById(Integer id) {
         return matches.stream().filter(iteratedMatch -> iteratedMatch.getId().equals(id)).findFirst().get();
     }
 
-    public void setStatustoPlayer(Integer idMatch, String idPlayer, String status){
+    public void setStatustoPlayer(Integer idMatch, String idPlayer, String status) {
         this.getMatchById(idMatch)
                 .getPlayers().stream()
                 .filter(players ->
                         players.getId().equals(idPlayer)).findFirst().get().setStatus(status);
     }
 
-    public void broadcastMatchMessage(Object message, Integer matchId, String method){
+    public void broadcastMatchMessage(Object message, Integer matchId, String method) {
+        System.out.println("broadcastMatchMessage");
         Match match = this.getMatchById(matchId);
-        for(int i = 0; i<match.getPlayers().size(); i++){
-            template.convertAndSendToUser(match.getPlayers().get(i).getId(), "/menu/game-selection", new UserResponse(method,message));
+        for (int i = 0; i < match.getPlayers().size(); i++) {
+            System.out.println("sending shit");
+            template.convertAndSendToUser(match.getPlayers().get(i).getId(), "/menu/game-selection", new UserResponse(method, message));
+        }
+    }
+
+    public void broadcastGameMatchMessage(Object message, Integer matchId, String method) {
+        System.out.println("broadcastMatchMessage");
+        Match match = this.getMatchById(matchId);
+        for (int i = 0; i < match.getPlayers().size(); i++) {
+            System.out.println("sending shit");
+            template.convertAndSendToUser(match.getPlayers().get(i).getId(), "/menu/game-command", new UserResponse(method, message));
         }
     }
 
     public Match moveUnit(Integer matchId, Integer troopId, Pair position) throws GameException {
+        System.out.println("moveUnit");
         Optional<Match> match = matches.stream().filter(iteratedMatch -> iteratedMatch.getId().equals(matchId)).findFirst();
         if (match.isPresent()) {
             Match existingMatch = match.get();
+            System.out.println("isPresent " + existingMatch.getTroops());
             existingMatch.getTroop(troopId).setPosition(position);
             return existingMatch;
         } else {
@@ -99,12 +113,12 @@ public class MatchService {
         }
     }
 
-    public Boolean checkMatch(Integer matchId) throws GameException{
+    public Boolean checkMatch(Integer matchId) throws GameException {
         boolean result = true;
         Optional<Match> match = matches.stream().filter(iteratedMatch -> iteratedMatch.getId().equals(matchId)).findFirst();
         if (match.isPresent()) {
-            for(PlayerPlaying player : match.get().getPlayers()){
-                if(!player.getStatus().equals("ready")){
+            for (PlayerPlaying player : match.get().getPlayers()) {
+                if (!player.getStatus().equals("ready")) {
                     throw new GameException("Not all players are ready.");
                 }
             }
